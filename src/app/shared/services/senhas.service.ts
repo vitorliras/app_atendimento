@@ -18,6 +18,7 @@ export class SenhasService {
   // somaExame() {this.senhasExame++; this.senhasTotal++; }
 
   private apiUrl = 'http://localhost:5003/api/Senha/';
+  private apiPainel = 'painel';
 
   constructor(private http: HttpClient) { }
 
@@ -25,8 +26,12 @@ export class SenhasService {
     return this.http.get<Senha[]>(this.apiUrl);
   }
 
+  getAllNextFiveSenhas(): Observable<Senha[]> {
+    return this.http.get<Senha[]>(this.apiUrl+this.apiPainel);
+  }
+
   getSenhaById(id: number): Observable<Senha> {
-    const url = `${this.apiUrl}/${id}`;
+    const url = `${this.apiUrl}${id}`;
     return this.http.get<Senha>(url);
   }
 
@@ -35,7 +40,7 @@ export class SenhasService {
   }
 
   updateSenha(senha: Senha): Observable<Senha> {
-    const url = `${this.apiUrl}/${senha.id}`;
+    const url = `${this.apiUrl}${senha.id}`;
     return this.http.put<Senha>(url, senha);
   }
 

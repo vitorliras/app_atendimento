@@ -1,6 +1,7 @@
 .custom-header {
   --background:#fff;
   --ion-color-base: #ffffff;
+  border: none !important;
 
   ion-toolbar {
     --background: var(--background);
@@ -10,11 +11,11 @@
     --box-shadow: none;
   }
 
-  .logo {
-    width: 70%;
-    height: 100px;
-    max-width: 300px;
-  }
+  // .logo {
+  //   width: 70%;
+  //   height: 100px;
+  //   max-width: 300px;
+  // }
 }
 
 .custom-tab-bar {

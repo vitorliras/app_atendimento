@@ -13,7 +13,7 @@ export class Tab1Page {
   inputNovaSenha: string = 'YYMMDD-0000';
 
   gerarSenha(tipo: string): void {
-    const data = new Date();
+    const data = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
     const ano = data.getFullYear().toString().slice(2);
     const mes = ('0' + (data.getMonth() + 1)).slice(-2);
     const dia = ('0' + data.getDate()).slice(-2);
@@ -33,7 +33,7 @@ export class Tab1Page {
       tipoSenha: tipoSenha,
       dataHoraEmissao: data,
       dataHoraAtendimento: null,
-      statusAtendimento: 'Pendente',
+      statusAtendimento: 'P',
       guicheId: 0,
       numeroSenha: this.inputNovaSenha
     };
