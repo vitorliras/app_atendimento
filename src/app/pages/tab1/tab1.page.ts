@@ -31,7 +31,7 @@ export class Tab1Page {
 
     const novaSenha = {
       tipoSenha: tipoSenha,
-      dataHoraEmissao: data,
+      dataHoraEmissao: null,
       dataHoraAtendimento: null,
       statusAtendimento: 'P',
       guicheId: 0,

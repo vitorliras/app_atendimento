@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ViewDidEnter } from '@ionic/angular';
 import { Guiche } from 'src/app/shared/model/guiche';
 import { Senha } from 'src/app/shared/model/senha';
+import { GuicheTemporizadorService } from 'src/app/shared/services/guiche-temporizador.service';
 import { GuicheService } from 'src/app/shared/services/guiche.service';
 import { SenhasService } from 'src/app/shared/services/senhas.service';
 
@@ -20,15 +21,20 @@ export class Tab2Page implements ViewDidEnter, OnInit, OnDestroy{
 
   constructor(
     private senhaService: SenhasService,
-    private guicheService: GuicheService
+    private guicheService: GuicheService,
+    private guicheTemporizadorService: GuicheTemporizadorService
   ) {}
 
   ngOnInit(): void {
     this.listarGuiche();
+    this.guiches = JSON.parse(localStorage.getItem('guiches') || '[]');
+
   }
 
   ngOnDestroy(): void {
-    this.intervalos.forEach(intervalo => clearInterval(intervalo));
+    this.guicheTemporizadorService.pararTemporizadores();
+
+    // this.intervalos.forEach(intervalo => clearInterval(intervalo));
   }
 
   ionViewDidEnter(): void {
@@ -73,18 +79,18 @@ export class Tab2Page implements ViewDidEnter, OnInit, OnDestroy{
     const guicheDisponivel = this.guiches.find(guiche => guiche.statusDisponibilidade === 'D');
     if (guicheDisponivel) {
       guicheDisponivel.statusDisponibilidade = 'I';
-      this.guicheService.updateGuiche(guicheDisponivel)
+      senha.statusAtendimento = 'A';
+      this.senhaService.updateSenha(senha).subscribe(()=>{
+        this.listarProximas5Senhas();
+      })
+      this.guicheService.updateGuiche(guicheDisponivel).subscribe()
       guicheDisponivel.tempo = this.gerarTemporizador(senha.tipoSenha);
-      const intervalo = setInterval(() => {
-        if(guicheDisponivel.tempo){
-        guicheDisponivel.tempo--;
-        if (guicheDisponivel.tempo <= 0) {
-          clearInterval(intervalo);
-          guicheDisponivel.statusDisponibilidade = 'D';
-        }
-      }
-      }, 1000);
-      this.intervalos.push(intervalo);
+      this.guicheTemporizadorService.iniciarTemporizador(guicheDisponivel, () => {
+        guicheDisponivel.statusDisponibilidade = 'D';
+        this.guicheService.updateGuiche(guicheDisponivel).subscribe()
+
+      });
+      localStorage.setItem('guiches', JSON.stringify(this.guiches));
     }
   }
 
