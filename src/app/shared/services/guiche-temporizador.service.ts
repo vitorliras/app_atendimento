@@ -25,7 +25,7 @@ export class GuicheTemporizadorService {
           callback();
         }
       }
-    }, 6000);
+    }, 500);
     this.intervalos.push(intervalo);
 
     localStorage.setItem('temporizadores', JSON.stringify(this.intervalos.map(i => ({ callback, intervalo }))));

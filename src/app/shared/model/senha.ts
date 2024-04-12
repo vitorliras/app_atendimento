@@ -4,6 +4,6 @@ export interface Senha {
   dataHoraEmissao: Date | null;
   dataHoraAtendimento: Date | null;
   statusAtendimento: string;
-  guicheId?: number;
+  tempoMinuto?: number;
   numeroSenha: string;
 }

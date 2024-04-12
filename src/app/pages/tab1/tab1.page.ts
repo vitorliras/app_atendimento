@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SenhasService } from '../../shared/services/senhas.service';
+import { RelatorioService } from 'src/app/shared/services/relatorio.service';
 
 
 @Component({
@@ -9,7 +10,10 @@ import { SenhasService } from '../../shared/services/senhas.service';
 })
 export class Tab1Page {
 
-  constructor(public senhaService: SenhasService) {}
+  constructor(
+    private senhaService: SenhasService,
+    private relatorioService: RelatorioService
+  ) {}
   inputNovaSenha: string = 'YYMMDD-0000';
 
   gerarSenha(tipo: string): void {
@@ -34,13 +38,15 @@ export class Tab1Page {
       dataHoraEmissao: null,
       dataHoraAtendimento: null,
       statusAtendimento: 'P',
-      guicheId: 0,
+      tempoMinuto: 0,
       numeroSenha: this.inputNovaSenha
     };
 
 
     this.senhaService.addSenha(novaSenha).subscribe(() => {
       console.log('Nova senha adicionada com sucesso.');
+      this.relatorioService.autalizarDadosRelatorio().subscribe();
+
     }, error => {
       console.error('Erro ao adicionar nova senha:', error);
     });
